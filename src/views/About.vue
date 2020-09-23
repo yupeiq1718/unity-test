@@ -1,14 +1,16 @@
 <template>
   <div class="about">
-    <unity v-if="active" src="Build/20200918_no-wasm.json" unityLoader="Build/UnityLoader.js" ref="myInstance" :hideFooter= "true"></unity>
+    <div v-if="unity">
+      <div class="unity">
+        <div id="unityContainer" class="unity-container"></div>
+      </div>
+    </div>
     <button @click="change">change</button>
-    <button @click="unity">active</button>
+    <button @click="active">unity</button>
   </div>
 </template>
 
 <script>
-import Unity from 'vue-unity-webgl'
-
 window.UnityToWeb = function (msg) {
   // alert(msg)
 }
@@ -16,17 +18,19 @@ export default {
   name: 'About',
   data () {
     return {
-      active: true
+      unity: true
     }
   },
-  components: { Unity },
   methods: {
     change () {
-      this.$refs.myInstance.message('GameManager', 'LoadScene', String(1))
+      unityInstance.SendMessage('GameManager', 'LoadScene', String(1))
     },
-    unity () {
-      this.active = !this.active
+    active () {
+      this.unity = !this.unity
     }
+  },
+  mounted () {
+    window.loadUnity()
   }
 }
 </script>
